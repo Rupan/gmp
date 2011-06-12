@@ -1,0 +1,23 @@
+GMP 5.0.2 for Android
+
+This repository contains a prebuilt copy of GMP compiled with the Android NDK r5c against API level 5 (Android 2.0, Donut).
+
+Installation in an Android project:
+
+ 1. Check out a copy of this repository into your jni folder, using something like this:
+    $ git submodule add git://github.com/Rupan/gmp.git
+ 2. Add "gmp" to APP_MODULES in Application.mk
+ 3. Add "gmp" to LOCAL_SHARED_LIBRARIES in your module's Android.mk as required.
+    Include gmp.h as required in source files.
+
+Usage at runtime:
+
+The GMP library must be loaded at runtime prior to dependent modules (this is a limitation of Android).
+Do something like this in your Java source code:
+
+  ...
+  System.loadLibrary("gmp");
+  System.loadLibrary("myBNmodule");
+  ...
+
+The script used to build the included libraries is named "compile-gmp.sh".  Build options are documented therein.
