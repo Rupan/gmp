@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-export NDK="${HOME}/work/android-ndk-r5c"
+export NDK="${HOME}/work/android-ndk-r6b"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -24,13 +24,8 @@ fi
 
 export PATH=${TOOLCHAIN}/bin:$PATH
 export LDFLAGS='-Wl,--fix-cortex-a8'
-
-# patch Makefile.am to build the shared object without versioning info, then localize autotools
-if [ ! -h config.sub ]
-then
-  patch -p1 < $0
-  autoreconf -sfi
-fi
+export LIBGMP_LDFLAGS='-avoid-version'
+export LIBGMPXX_LDFLAGS='-avoid-version'
 
 ################################################################################################################
 
@@ -46,7 +41,7 @@ cd armeabi-v7a && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd .
 make distclean
 
 # armeabi
-unset CFLAGS
+export CFLAGS="-O2 -pedantic -fomit-frame-pointer"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make
 make install DESTDIR=$PWD/armeabi
