@@ -1,6 +1,6 @@
 GMP 5.0.2 for Android
 
-This repository contains a prebuilt copy of GMP compiled with the Android NDK r5c against API level 5 (which corresponds to Android "Donut" 2.0).
+This repository contains a prebuilt copy of GMP compiled with the Android NDK r6b against API level 5 (which corresponds to Android "Donut" 2.0).
 
 Installation and usage in an Android project:
 
@@ -20,4 +20,9 @@ To handle this condition, do something like the following in your Java source co
   System.loadLibrary("myBNmodule");
   ...
 
-The script used to compile and package the prebuilt libraries is named "compile-gmp.sh".  The build procedure documented therein.
+The script used to compile and package the prebuilt libraries is named "compile-gmp.sh".  The build procedure is documented therein.
+
+Notes:
+
+Ideally it would be good to run the test suite on a target device.  However, 'make test' dies after attempting to run a cross-compiled binary
+on the host system and the problem seems somewhat nontrivial to fix.  Patches and/or suggestions are welcome.

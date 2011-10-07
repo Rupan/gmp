@@ -42,7 +42,7 @@ export LIBGMPXX_LDFLAGS='-avoid-version'
 # armeabi-v7a
 export CFLAGS="-O2 -pedantic -fomit-frame-pointer -march=armv7-a -mfloat-abi=softfp"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
-make
+make -j4
 make install DESTDIR=$PWD/armeabi-v7a
 cd armeabi-v7a && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
@@ -50,7 +50,7 @@ make distclean
 # armeabi
 export CFLAGS="-O2 -pedantic -fomit-frame-pointer"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
-make
+make -j4
 make install DESTDIR=$PWD/armeabi
 cd armeabi && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
