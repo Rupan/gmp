@@ -13,7 +13,7 @@ then
   touch ANDROID_PATCHED
 fi
 
-export NDK="${HOME}/work/android-ndk-r6b"
+export NDK="/home/dev/android-ndk-r7"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -22,7 +22,7 @@ then
 fi
 
 # Extract an android-5 toolchain if needed
-export TARGET="android-5"
+export TARGET="android-9"
 export TOOLCHAIN="/tmp/${TARGET}"
 if [ ! -d ${TOOLCHAIN} ]
 then
@@ -37,12 +37,17 @@ export LIBGMPXX_LDFLAGS='-avoid-version'
 ################################################################################################################
 
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
-#export CFLAGS="-O2 -pedantic -fomit-frame-pointer -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize"
+export CFLAGS="-O2 -pedantic -fomit-frame-pointer -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
+./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
+make -j8 2>&1 | tee armeabi-v7a-neon.log
+make install DESTDIR=$PWD/armeabi-v7a-neon
+cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
+make distclean
 
 # armeabi-v7a
 export CFLAGS="-O2 -pedantic -fomit-frame-pointer -march=armv7-a -mfloat-abi=softfp"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
-make -j4
+make -j8 2>&1 | tee armeabi-v7a.log
 make install DESTDIR=$PWD/armeabi-v7a
 cd armeabi-v7a && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
@@ -50,7 +55,7 @@ make distclean
 # armeabi
 export CFLAGS="-O2 -pedantic -fomit-frame-pointer"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
-make -j4
+make -j8 2>&1 | tee armeabi.log
 make install DESTDIR=$PWD/armeabi
 cd armeabi && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean

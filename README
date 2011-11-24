@@ -1,6 +1,6 @@
 GMP 5.0.2 for Android
 
-This repository contains a prebuilt copy of GMP compiled with the Android NDK r6b against API level 5 (which corresponds to Android "Donut" 2.0).
+This repository contains a prebuilt copy of GMP compiled with the Android NDK r7 against API level 9 (which corresponds to Android "Gingerbread" 2.3.1).
 
 Installation and usage in an Android project:
 
@@ -26,3 +26,6 @@ Notes:
 
 Ideally it would be good to run the test suite on a target device.  However, 'make test' dies after attempting to run a cross-compiled binary
 on the host system and the problem seems somewhat nontrivial to fix.  Patches and/or suggestions are welcome.
+
+The armeabi-v7a-neon build is now provided.  Move the shared object into the armeabi-v7a directory as e.g. "libgmp-neon.so".  The correct shared object
+must be loaded at runtime by the application through the cpufeatures static library.  See the NDK documentation, or just stick with the armeabi-v7a build.
