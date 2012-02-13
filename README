@@ -1,4 +1,4 @@
-GMP 5.0.2 for Android
+GMP 5 for Android
 
 This repository contains a prebuilt copy of GMP compiled with the Android NDK r7 against API level 9 (which corresponds to Android "Gingerbread" 2.3.1).
 
@@ -12,8 +12,7 @@ Installation and usage in an Android project:
 
 Usage at runtime:
 
-The GMP library must be loaded prior to other dependent modules.  This is an apparent shortcoming / limitation of Android.
-To handle this condition, do something like the following in your Java source code:
+The GMP library must be loaded prior to other dependent modules.  This is an apparent shortcoming / limitation of Android.  To handle this condition, do something like the following in your Java source code:
 
   ...
   System.loadLibrary("gmp");
@@ -24,8 +23,8 @@ The script used to compile and package the prebuilt libraries is named "compile-
 
 Notes:
 
-Ideally it would be good to run the test suite on a target device.  However, 'make test' dies after attempting to run a cross-compiled binary
-on the host system and the problem seems somewhat nontrivial to fix.  Patches and/or suggestions are welcome.
+Ideally it would be good to run the test suite on a target device.  However, 'make test' dies after attempting to run a cross-compiled binary on the host system and the problem seems somewhat nontrivial to fix.  Patches and/or suggestions are welcome.  A starting point might be as follows:
 
-The armeabi-v7a-neon build is now provided.  Move the shared object into the armeabi-v7a directory as e.g. "libgmp-neon.so".  The correct shared object
-must be loaded at runtime by the application through the cpufeatures static library.  See the NDK documentation, or just stick with the armeabi-v7a build.
+  Building the tests without running them is easy; just do "make TESTS=check"
+
+An armeabi-v7a-neon build is now provided.  To use it, move the shared object from the armeabi-v7a-neon directory into the armeabi-v7a directory as e.g. "libgmp-neon.so".  You'll have to hack up Android.mk so it copies the new shared object together with the existing one.  Then the correct shared object must be selected at runtime by the application using the cpufeatures static library.  See the NDK documentation, or just stick with the armeabi-v7a build.
