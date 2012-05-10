@@ -9,6 +9,8 @@ Installation and usage in an Android project:
  2. Add "gmp" to APP_MODULES in jni/Application.mk
  3. Add "gmp" to LOCAL_SHARED_LIBRARIES in your module's Android.mk as required.
  4. Use GMP as normal by including gmp.h in your source files where required.
+ 5. Build and copy the shared objects from within the jni folder:
+    $ ndk-build
 
 Usage at runtime:
 
@@ -25,6 +27,6 @@ Notes:
 
 Ideally it would be good to run the test suite on a target device.  However, 'make test' dies after attempting to run a cross-compiled binary on the host system and the problem seems somewhat nontrivial to fix.  Patches and/or suggestions are welcome.  A starting point might be as follows:
 
-  Building the tests without running them is easy; just do "make TESTS=check"
+  Building the tests without running them is easy; just do "make check TESTS=check"
 
 An armeabi-v7a-neon build is now provided.  To use it, move the shared object from the armeabi-v7a-neon directory into the armeabi-v7a directory as e.g. "libgmp-neon.so".  You'll have to hack up Android.mk so it copies the new shared object together with the existing one.  Then the correct shared object must be selected at runtime by the application using the cpufeatures static library.  See the NDK documentation, or just stick with the armeabi-v7a build.
