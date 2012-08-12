@@ -1,6 +1,6 @@
 GMP 5 for Android
 
-This repository contains a prebuilt copy of GMP compiled with the Android NDK r7 against API level 9 (which corresponds to Android "Gingerbread" 2.3.1).
+This repository contains a prebuilt copy of GMP compiled with the Android NDK r8b against API level 9 (which corresponds to Android "Gingerbread" 2.3.1).
 
 Installation and usage in an Android project:
 
@@ -9,7 +9,7 @@ Installation and usage in an Android project:
  2. Add "gmp" to APP_MODULES in jni/Application.mk
  3. Add "gmp" to LOCAL_SHARED_LIBRARIES in your module's Android.mk as required.
  4. Use GMP as normal by including gmp.h in your source files where required.
- 5. Build and copy the shared objects from within the jni folder:
+ 5. Build the rest of your native code as you would normally:
     $ ndk-build
 
 Usage at runtime:
