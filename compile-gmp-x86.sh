@@ -29,7 +29,8 @@ export LIBGMPXX_LDFLAGS='-avoid-version'
 
 ################################################################################################################
 
-BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer'
+# base CFLAGS set from ndk-build output
+BASE_CFLAGS='-O2 -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300'
 
 # x86, CFLAGS set according to 'CPU Arch ABIs' in the r8b documentation
 export CFLAGS="${BASE_CFLAGS} -march=i686 -msse3 -mstackrealign -mfpmath=sse"

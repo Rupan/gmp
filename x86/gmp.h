@@ -2267,7 +2267,7 @@ enum
 
 /* Define CC and CFLAGS which were used to build this version of GMP */
 #define __GMP_CC "i686-linux-android-gcc -std=gnu99"
-#define __GMP_CFLAGS "-O2 -pedantic -fomit-frame-pointer -march=i686 -msse3 -mstackrealign -mfpmath=sse"
+#define __GMP_CFLAGS "-O2 -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300 -march=i686 -msse3 -mstackrealign -mfpmath=sse"
 
 /* Major version number is the value of __GNU_MP__ too, above and in mp.h. */
 #define __GNU_MP_VERSION 5
