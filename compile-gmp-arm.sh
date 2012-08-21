@@ -26,14 +26,13 @@ then
 fi
 
 export PATH="${TOOLCHAIN}/bin:${PATH}"
-# export LDFLAGS='-Wl,--fix-cortex-a8,-z,noexecstack,-z,relro'
-export LDFLAGS='-Wl,--fix-cortex-a8'
+export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
 
 ################################################################################################################
 
-BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer'
+BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -fstack-protector -fno-strict-aliasing -finline-limit=64'
 
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
 export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
@@ -44,7 +43,7 @@ cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr &&
 make distclean
 
 # armeabi-v7a
-export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp"
+export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi-v7a.log
 make install DESTDIR=$PWD/armeabi-v7a
@@ -52,7 +51,7 @@ cd armeabi-v7a && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd .
 make distclean
 
 # armeabi
-export CFLAGS="${BASE_CFLAGS}"
+export CFLAGS="${BASE_CFLAGS} -march=armv5te -mtune=xscale -msoft-float"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi.log
 make install DESTDIR=$PWD/armeabi
