@@ -36,6 +36,7 @@ BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer -Wa,--noexecstack -fno-strict-al
 export CFLAGS="${BASE_CFLAGS}"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=mipsel-linux-android
 make -j8 V=1 2>&1 | tee android-mips.log
+make -j8 check TESTS=''
 make install DESTDIR=$PWD/mips
 cd mips && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean

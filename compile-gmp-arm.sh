@@ -38,6 +38,7 @@ BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sec
 export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi-v7a-neon.log
+make -j8 check TESTS=''
 make install DESTDIR=$PWD/armeabi-v7a-neon
 cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
@@ -46,6 +47,7 @@ make distclean
 export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi-v7a.log
+make -j8 check TESTS=''
 make install DESTDIR=$PWD/armeabi-v7a
 cd armeabi-v7a && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
@@ -54,6 +56,7 @@ make distclean
 export CFLAGS="${BASE_CFLAGS} -march=armv5te -mtune=xscale -msoft-float"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi.log
+make -j8 check TESTS=''
 make install DESTDIR=$PWD/armeabi
 cd armeabi && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean

@@ -36,6 +36,7 @@ BASE_CFLAGS='-O2 -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sec
 export CFLAGS="${BASE_CFLAGS} -march=i686 -msse3 -mstackrealign -mfpmath=sse"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=i686-linux-android
 make -j8 V=1 2>&1 | tee android-x86.log
+make -j8 check TESTS=''
 make install DESTDIR=$PWD/x86
 cd x86 && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
