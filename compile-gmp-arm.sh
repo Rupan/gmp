@@ -39,8 +39,14 @@ export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftre
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi-v7a-neon.log
 make -j8 check TESTS=''
+TESTBASE='tests-armeabi-v7a-neon'
+find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
+tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
+rm -f ${TESTBASE}.txt
+xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/armeabi-v7a-neon
 cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
+mv ${TESTBASE}.tar.xz armeabi-v7a-neon
 make distclean
 
 # armeabi-v7a
@@ -48,8 +54,14 @@ export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi-v7a.log
 make -j8 check TESTS=''
+TESTBASE='tests-armeabi-v7a'
+find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
+tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
+rm -f ${TESTBASE}.txt
+xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/armeabi-v7a
 cd armeabi-v7a && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
+mv ${TESTBASE}.tar.xz armeabi-v7a
 make distclean
 
 # armeabi
@@ -57,8 +69,14 @@ export CFLAGS="${BASE_CFLAGS} -march=armv5te -mtune=xscale -msoft-float"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi.log
 make -j8 check TESTS=''
+TESTBASE='tests-armeabi'
+find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
+tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
+rm -f ${TESTBASE}.txt
+xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/armeabi
 cd armeabi && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
+mv ${TESTBASE}.tar.xz armeabi
 make distclean
 
 exit 0

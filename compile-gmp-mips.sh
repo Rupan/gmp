@@ -37,8 +37,13 @@ export CFLAGS="${BASE_CFLAGS}"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=mipsel-linux-android
 make -j8 V=1 2>&1 | tee android-mips.log
 make -j8 check TESTS=''
+TESTBASE='tests-mips'
+find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
+tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
+rm -f ${TESTBASE}.txt
+xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/mips
 cd mips && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
-
+mv ${TESTBASE}.tar.xz mips
 exit 0
