@@ -1,0 +1,25 @@
+From f149c9f034c5aeefd3258d2449743ceb277a68d4 Mon Sep 17 00:00:00 2001
+From: Andoni Morales Alastruey <ylatuya@gmail.com>
+Date: Wed, 5 Sep 2012 12:58:17 +0200
+Subject: [PATCH] Fix compilation with -mthumb
+
+---
+ longlong.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/longlong.h b/longlong.h
+index 8cac79d..214b179 100644
+--- a/longlong.h
++++ b/longlong.h
+@@ -423,7 +423,7 @@ long __MPN(count_leading_zeros) _PROTO ((UDItype));
+ 	     "rIJ" ((USItype) (bl)))
+ #endif
+ 
+-#if defined (__arm__) && W_TYPE_SIZE == 32
++#if defined (__arm__) && W_TYPE_SIZE == 32 && !defined(__thumb__)
+ #define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+   __asm__ ("adds\t%1, %4, %5\n\tadc\t%0, %2, %3"			\
+ 	   : "=r" (sh), "=&r" (sl)					\
+-- 
+1.7.9.5
+
