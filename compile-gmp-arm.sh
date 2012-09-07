@@ -19,7 +19,7 @@ fi
 
 # Extract an android-9 toolchain if needed
 export TARGET="android-9"
-export TOOLCHAIN="/tmp/${TARGET}"
+export TOOLCHAIN="/tmp/${TARGET}-arm"
 if [ ! -d ${TOOLCHAIN} ]
 then
   ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.6 --platform=${TARGET} --install-dir=${TOOLCHAIN}
@@ -65,7 +65,7 @@ mv ${TESTBASE}.tar.xz armeabi-v7a
 make distclean
 
 # armeabi
-export CFLAGS="${BASE_CFLAGS} -march=armv5te -mtune=xscale -msoft-float"
+export CFLAGS="${BASE_CFLAGS} -march=armv5te -mtune=xscale -msoft-float -mthumb"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi.log
 make -j8 check TESTS=''
