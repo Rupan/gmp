@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-export NDK="${HOME}/Downloads/android-ndk-r8b"
+export NDK="${HOME}/Downloads/android-ndk-r8c"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -36,14 +36,14 @@ BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer -Wa,--noexecstack -fno-strict-al
 export CFLAGS="${BASE_CFLAGS}"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=mipsel-linux-android
 make -j8 V=1 2>&1 | tee android-mips.log
-make -j8 check TESTS=''
-TESTBASE='tests-mips'
-find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
-tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
-rm -f ${TESTBASE}.txt
-xz -9 -v ${TESTBASE}.tar
+#make -j8 check TESTS=''
+#TESTBASE='tests-mips'
+#find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
+#tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
+#rm -f ${TESTBASE}.txt
+#xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/mips
 cd mips && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
-mv ${TESTBASE}.tar.xz mips
+#mv ${TESTBASE}.tar.xz mips
 exit 0

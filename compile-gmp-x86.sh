@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-export NDK="${HOME}/Downloads/android-ndk-r8b"
+export NDK="${HOME}/Downloads/android-ndk-r8c"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -32,18 +32,18 @@ export LIBGMPXX_LDFLAGS='-avoid-version'
 # base CFLAGS set from ndk-build output
 BASE_CFLAGS='-O2 -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300'
 
-# x86, CFLAGS set according to 'CPU Arch ABIs' in the r8b documentation
-export CFLAGS="${BASE_CFLAGS} -march=i686 -msse3 -mstackrealign -mfpmath=sse"
+# x86, CFLAGS set according to 'CPU Arch ABIs' in the r8c documentation
+export CFLAGS="${BASE_CFLAGS} -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
 ./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=i686-linux-android
 make -j8 V=1 2>&1 | tee android-x86.log
-make -j8 check TESTS=''
-TESTBASE='tests-x86'
-find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
-tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
-rm -f ${TESTBASE}.txt
-xz -9 -v ${TESTBASE}.tar
+#make -j8 check TESTS=''
+#TESTBASE='tests-x86'
+#find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
+#tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
+#rm -f ${TESTBASE}.txt
+#xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/x86
 cd x86 && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
 make distclean
-mv ${TESTBASE}.tar.xz x86
+#mv ${TESTBASE}.tar.xz x86
 exit 0
