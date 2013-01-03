@@ -1,0 +1,48 @@
+#!/system/bin/sh
+
+export LD_LIBRARY_PATH=${PWD}
+export TARGET='armeabi'
+
+# tests as executed by GMPbench 0.2
+
+mkdir ${TARGET}
+
+./multiply 128 >${TARGET}/RES-multiply-128
+./multiply 512 >${TARGET}/RES-multiply-512
+./multiply 8192 >${TARGET}/RES-multiply-8192
+./multiply 131072 >${TARGET}/RES-multiply-131072
+./multiply 2097152 >${TARGET}/RES-multiply-2097152
+./multiply 128 128 >${TARGET}/RES-multiply-128,128
+./multiply 512 512 >${TARGET}/RES-multiply-512,512
+./multiply 8192 8192 >${TARGET}/RES-multiply-8192,8192
+./multiply 131072 131072 >${TARGET}/RES-multiply-131072,131072
+./multiply 2097152 2097152 >${TARGET}/RES-multiply-2097152,2097152
+./multiply 15000 10000 >${TARGET}/RES-multiply-15000,10000
+./multiply 20000 10000 >${TARGET}/RES-multiply-20000,10000
+./multiply 30000 10000 >${TARGET}/RES-multiply-30000,10000
+./multiply 16777216 512 >${TARGET}/RES-multiply-16777216,512
+./multiply 16777216 262144 >${TARGET}/RES-multiply-16777216,262144
+./divide 8192 32 >${TARGET}/RES-divide-8192,32
+./divide 8192 64 >${TARGET}/RES-divide-8192,64
+./divide 8192 128 >${TARGET}/RES-divide-8192,128
+./divide 8192 4096 >${TARGET}/RES-divide-8192,4096
+./divide 131072 65536 >${TARGET}/RES-divide-131072,65536
+./divide 8388608 4194304 >${TARGET}/RES-divide-8388608,4194304
+./divide 8192 8064 >${TARGET}/RES-divide-8192,8064
+./divide 16777216 262144 >${TARGET}/RES-divide-16777216,262144
+./gcd 128 128 >${TARGET}/RES-gcd-128,128
+./gcd 512 512 >${TARGET}/RES-gcd-512,512
+./gcd 8192 8192 >${TARGET}/RES-gcd-8192,8192
+./gcd 131072 131072 >${TARGET}/RES-gcd-131072,131072
+./gcd 1048576 1048576 >${TARGET}/RES-gcd-1048576,1048576
+./gcdext 128 128 >${TARGET}/RES-gcdext-128,128
+./gcdext 512 512 >${TARGET}/RES-gcdext-512,512
+./gcdext 8192 8192 >${TARGET}/RES-gcdext-8192,8192
+./gcdext 131072 131072 >${TARGET}/RES-gcdext-131072,131072
+./gcdext 1048576 1048576 >${TARGET}/RES-gcdext-1048576,1048576
+./rsa 512 >${TARGET}/RES-rsa-512
+./rsa 1024 >${TARGET}/RES-rsa-1024
+./rsa 2048 >${TARGET}/RES-rsa-2048
+./pi 10000 >${TARGET}/RES-pi-10000
+./pi 100000 >${TARGET}/RES-pi-100000
+./pi 1000000 >${TARGET}/RES-pi-1000000

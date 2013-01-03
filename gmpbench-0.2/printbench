@@ -1,0 +1,92 @@
+#! /bin/sh
+
+# Copyright 2003 Free Software Foundation, Inc.
+
+# This file is part of the GNU GMPbench.
+
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+echo "***** GMPbench version 0.2 *****"
+
+multiply_args="128 512 8192 131072 2097152 128,128 512,512 8192,8192 131072,131072 2097152,2097152 15000,10000 20000,10000 30000,10000 16777216,512 16777216,262144"
+multiply_weight=1
+
+divide_args="8192,32 8192,64 8192,128 8192,4096 131072,65536 8388608,4194304 8192,8064 16777216,262144"
+divide_weight=1
+
+gcd_args="128,128 512,512 8192,8192 131072,131072 1048576,1048576"
+gcd_weight=0.5
+
+gcdext_args="128,128 512,512 8192,8192 131072,131072 1048576,1048576"
+gcdext_weight=0.5
+
+rsa_args="512 1024 2048"
+rsa_weight=1
+
+pi_args="10000 100000 1000000"
+pi_weight=1
+
+base_tests="multiply divide gcd gcdext"
+app_tests="rsa pi"
+
+tests="base app"
+
+echo "Running benchmarks (propagated score accuracy exceeds printed intermediates)"
+
+acc2=1
+n2=0
+for cat in $tests
+  do
+    echo "  Category $cat"
+    eval tests=\$${cat}_tests
+
+    acc1=1
+    n1=0
+    for t in $tests
+      do
+	eval weight=\$${t}_weight
+	echo "    Program $t (weight=$weight)"
+	eval args=\$${t}_args
+
+	acc=1
+	n=0
+	for a in $args
+	  do
+	    ta=`echo $a | sed 's;,; ;g'`
+	    printf '      %-48s' "GMPbench.$cat.$t($a)"
+	    res=`grep "^RESULT" RES-$t-$a | sed 's;^RESULT: \([0-9.]*\).*$;\1;'`
+	    printf '%12s\n' `gexpr -prec 4 "$res"`
+	    acc=`gexpr -prec 10 "$acc * $res"`
+	    n=`gexpr $n+1`
+	  done
+
+	out=`gexpr -prec 10 "$acc^(1/$n)"`
+	printf '    %-40s%12s\n' "GMPbench.$cat.$t" `gexpr -prec 5 "$out"`
+	acc1=`gexpr -prec 10 "$acc1 * $out^$weight"`
+	n1=`gexpr $n1+$weight`
+      done
+
+    out=`gexpr -prec 10 "$acc1^(1/$n1)"`
+    printf '  %-32s%12s\n' "GMPbench.$cat" `gexpr -prec 5 "$out"`
+    acc2=`gexpr -prec 10 "$acc2 * $out"`
+    n2=`gexpr $n2+1`
+  done
+
+
+out=`gexpr "$acc2^(1/$n2)"`
+echo "GMPbench:         $out"
+
+exit 0
