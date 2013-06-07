@@ -9,7 +9,7 @@ then
   exit 1
 fi
 
-export NDK="${HOME}/Downloads/android-ndk-r8c"
+export NDK="/space/android-ndk-r8e"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -22,7 +22,7 @@ export TARGET="android-9"
 export TOOLCHAIN="/tmp/${TARGET}-arm"
 if [ ! -d ${TOOLCHAIN} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.6 --platform=${TARGET} --install-dir=${TOOLCHAIN}
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.7 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
 fi
 
 export PATH="${TOOLCHAIN}/bin:${PATH}"
