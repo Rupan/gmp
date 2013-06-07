@@ -19,7 +19,7 @@ export TARGET="android-9"
 export TOOLCHAIN="/tmp/${TARGET}-x86"
 if [ ! -d ${TOOLCHAIN} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86-4.6 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86-4.7 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
 fi
 
 export PATH="${TOOLCHAIN}/bin:${PATH}"
