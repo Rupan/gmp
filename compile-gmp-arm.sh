@@ -17,8 +17,8 @@ then
   exit 1
 fi
 
-# Extract an android-9 toolchain if needed
-export TARGET="android-9"
+# Extract an android-14 toolchain if needed
+export TARGET="android-14"
 export TOOLCHAIN="/tmp/${TARGET}-arm"
 if [ ! -d ${TOOLCHAIN} ]
 then
@@ -36,7 +36,7 @@ BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sec
 
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
 export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
-./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
+./configure --prefix=/usr --disable-static --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi-v7a-neon.log
 #make -j8 check TESTS=''
 #TESTBASE='tests-armeabi-v7a-neon'
@@ -51,7 +51,7 @@ make distclean
 
 # armeabi-v7a
 export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
-./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
+./configure --prefix=/usr --disable-static --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi-v7a.log
 #make -j8 check TESTS=''
 #TESTBASE='tests-armeabi-v7a'
@@ -66,7 +66,7 @@ make distclean
 
 # armeabi
 export CFLAGS="${BASE_CFLAGS} -march=armv5te -mtune=xscale -msoft-float -mthumb"
-./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=arm-linux-androideabi
+./configure --prefix=/usr --disable-static --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi
 make -j8 V=1 2>&1 | tee armeabi.log
 #make -j8 check TESTS=''
 #TESTBASE='tests-armeabi'

@@ -14,8 +14,8 @@ then
   exit 1
 fi
 
-# Extract an android-9 toolchain if needed
-export TARGET="android-9"
+# Extract an android-14 toolchain if needed
+export TARGET="android-14"
 export TOOLCHAIN="/tmp/${TARGET}-x86"
 if [ ! -d ${TOOLCHAIN} ]
 then
@@ -34,7 +34,7 @@ BASE_CFLAGS='-O2 -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sec
 
 # x86, CFLAGS set according to 'CPU Arch ABIs' in the r8c documentation
 export CFLAGS="${BASE_CFLAGS} -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
-./configure --prefix=/usr --disable-static --build=i686-pc-linux-gnu --host=i686-linux-android
+./configure --prefix=/usr --disable-static --build=x86_64-pc-linux-gnu --host=i686-linux-android
 make -j8 V=1 2>&1 | tee android-x86.log
 #make -j8 check TESTS=''
 #TESTBASE='tests-x86'
