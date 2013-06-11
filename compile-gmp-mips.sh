@@ -34,7 +34,7 @@ BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer -Wa,--noexecstack -fno-strict-al
 
 # mips CFLAGS not specified in 'CPU Arch ABIs' in the r8b documentation
 export CFLAGS="${BASE_CFLAGS}"
-./configure --prefix=/usr --disable-static --build=x86_64-pc-linux-gnu --host=mipsel-linux-android
+./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=mipsel-linux-android
 make -j8 V=1 2>&1 | tee android-mips.log
 #make -j8 check TESTS=''
 #TESTBASE='tests-mips'
@@ -43,7 +43,7 @@ make -j8 V=1 2>&1 | tee android-mips.log
 #rm -f ${TESTBASE}.txt
 #xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/mips
-cd mips && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
+cd mips && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 make distclean
 #mv ${TESTBASE}.tar.xz mips
 exit 0
