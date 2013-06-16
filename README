@@ -1,6 +1,6 @@
 GMP 5 for Android
 
-This repository contains a prebuilt copy of GMP compiled with the Android NDK r8b against API level 9 (which corresponds to Android "Gingerbread" 2.3.1).
+This repository contains a prebuilt copy of GMP compiled with the Android NDK r8e against API level 14 (which corresponds to Android "Ice Cream Sandwich" 4.0).
 
 Installation and usage in an Android project:
 
@@ -21,7 +21,7 @@ The GMP library must be loaded prior to other dependent modules.  This is an app
   System.loadLibrary("myBNmodule");
   ...
 
-The script used to compile and package the prebuilt libraries is named "compile-gmp.sh".  The build procedure is documented therein.
+The scripts used to compile and package the prebuilt libraries is named "compile-gmp-{arm,mips,x86}.sh".  The build procedure is documented therein.
 
 Notes:
 
