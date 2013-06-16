@@ -1,0 +1,61 @@
+This benchmark was executed on Android 4.2.2 (build JDQ39) running on a Galaxy Nexus.
+The code in use corresponds to commit ba237bc in this repository (GMP 5.1.2).
+
+***** GMPbench version 0.2 *****
+Running benchmarks (propagated score accuracy exceeds printed intermediates)
+  Category base
+    Program multiply (weight=1)
+      GMPbench.base.multiply(128)                        2.323e+06
+      GMPbench.base.multiply(512)                        3.729e+05
+      GMPbench.base.multiply(8192)                            5263
+      GMPbench.base.multiply(131072)                           114
+      GMPbench.base.multiply(2097152)                         4.13
+      GMPbench.base.multiply(128,128)                    2.035e+06
+      GMPbench.base.multiply(512,512)                    3.126e+05
+      GMPbench.base.multiply(8192,8192)                       4344
+      GMPbench.base.multiply(131072,131072)                   84.2
+      GMPbench.base.multiply(2097152,2097152)                 3.02
+      GMPbench.base.multiply(15000,10000)                     2223
+      GMPbench.base.multiply(20000,10000)                     1797
+      GMPbench.base.multiply(30000,10000)                     1130
+      GMPbench.base.multiply(16777216,512)                    14.9
+      GMPbench.base.multiply(16777216,262144)                0.806
+    GMPbench.base.multiply                        1341.2
+    Program divide (weight=1)
+      GMPbench.base.divide(8192,32)                      4.842e+04
+      GMPbench.base.divide(8192,64)                      1.985e+04
+      GMPbench.base.divide(8192,128)                     1.505e+04
+      GMPbench.base.divide(8192,4096)                    1.065e+04
+      GMPbench.base.divide(131072,65536)                       112
+      GMPbench.base.divide(8388608,4194304)                  0.644
+      GMPbench.base.divide(8192,8064)                    5.492e+05
+      GMPbench.base.divide(16777216,262144)                  0.414
+    GMPbench.base.divide                          1122.8
+    Program gcd (weight=0.5)
+      GMPbench.base.gcd(128,128)                         1.562e+05
+      GMPbench.base.gcd(512,512)                         2.583e+04
+      GMPbench.base.gcd(8192,8192)                             562
+      GMPbench.base.gcd(131072,131072)                        6.48
+      GMPbench.base.gcd(1048576,1048576)                     0.337
+    GMPbench.base.gcd                             345.91
+    Program gcdext (weight=0.5)
+      GMPbench.base.gcdext(128,128)                       1.05e+05
+      GMPbench.base.gcdext(512,512)                      1.984e+04
+      GMPbench.base.gcdext(8192,8192)                          342
+      GMPbench.base.gcdext(131072,131072)                     4.56
+      GMPbench.base.gcdext(1048576,1048576)                  0.216
+    GMPbench.base.gcdext                          234.01
+  GMPbench.base                         753.87
+  Category app
+    Program rsa (weight=1)
+      GMPbench.app.rsa(512)                                    992
+      GMPbench.app.rsa(1024)                                   164
+      GMPbench.app.rsa(2048)                                  26.1
+    GMPbench.app.rsa                              161.93
+    Program pi (weight=1)
+      GMPbench.app.pi(10000)                                  40.7
+      GMPbench.app.pi(100000)                                 1.81
+      GMPbench.app.pi(1000000)                              0.0916
+    GMPbench.app.pi                               1.8897
+  GMPbench.app                          17.493
+GMPbench:         114.84
