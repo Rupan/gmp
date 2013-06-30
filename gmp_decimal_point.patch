@@ -1,0 +1,45 @@
+--- a/cxx/ismpf.cc	Wed Jun 19 17:25:56 2013 +0200
++++ b/cxx/ismpf.cc	Fri Jun 28 21:09:37 2013 +0200
+@@ -45,7 +45,7 @@
+   bool ok = false;
+ 
+   // C decimal point, as expected by mpf_set_str
+-  const char *lconv_point = localeconv()->decimal_point;
++  const char *lconv_point = GMP_DECIMAL_POINT;
+ 
+   // C++ decimal point
+ #if HAVE_STD__LOCALE
+
+--- a/cxx/osmpf.cc	Wed Jun 19 17:25:56 2013 +0200
++++ b/cxx/osmpf.cc	Fri Jun 28 21:09:37 2013 +0200
+@@ -47,7 +47,7 @@
+   point[0] = use_facet< numpunct<char> >(o.getloc()).decimal_point();
+   point[1] = '\0';
+ #else
+-  const char *point = localeconv()->decimal_point;
++  const char *point = GMP_DECIMAL_POINT;
+ #endif
+ 
+   GMP_ASPRINTF_T_INIT (d, &result);
+
+--- a/tests/cxx/t-locale.cc	Wed Jun 19 17:25:56 2013 +0200
++++ b/tests/cxx/t-locale.cc	Fri Jun 28 21:09:37 2013 +0200
+@@ -105,7 +105,7 @@
+                   cout << "  point " << point[i] << "\n";
+                   cout << "  str   \"" << str << "\"\n";
+                   cout << "  localeconv point \""
+-                       << localeconv()->decimal_point << "\"\n";
++                       << GMP_DECIMAL_POINT << "\"\n";
+                   abort ();
+                 }
+ 
+@@ -120,7 +120,7 @@
+                   cout << "  got   " << got << "\n";
+                   cout << "  want  " << want << "\n";
+                   cout << "  localeconv point \""
+-                       << localeconv()->decimal_point << "\"\n";
++                       << GMP_DECIMAL_POINT << "\"\n";
+                   abort ();
+                 }
+             }
+
