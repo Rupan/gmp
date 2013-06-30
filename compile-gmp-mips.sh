@@ -27,9 +27,8 @@ export LDFLAGS='-Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
 
-# Uncomment the following line to enable C++ support
-# For GMP <= 5.1.2 you must apply gmp_decimal_point.patch
-#export CPLUSPLUS_FLAGS='--enable-cxx'
+# The following line enables C++ support. For GMP <= 5.1.2 you *must* apply gmp_decimal_point.patch prior to running this script.
+export CPLUSPLUS_FLAGS='--enable-cxx'
 
 ################################################################################################################
 
