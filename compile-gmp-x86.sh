@@ -27,6 +27,10 @@ export LDFLAGS='-Wl,-z,noexecstack,-z,relro'
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
 
+# Uncomment the following line to enable C++ support
+# For GMP <= 5.1.2 you must apply gmp_decimal_point.patch
+#export CPLUSPLUS_FLAGS='--enable-cxx'
+
 ################################################################################################################
 
 # base CFLAGS set from ndk-build output
@@ -34,7 +38,7 @@ BASE_CFLAGS='-O2 -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sec
 
 # x86, CFLAGS set according to 'CPU Arch ABIs' in the r8c documentation
 export CFLAGS="${BASE_CFLAGS} -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
-./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=i686-linux-android MPN_PATH="x86/atom/sse2 x86/atom/mmx x86/atom x86 generic"
+./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=i686-linux-android MPN_PATH="x86/atom/sse2 x86/atom/mmx x86/atom x86 generic"
 make -j8 V=1 2>&1 | tee android-x86.log
 #make -j8 check TESTS=''
 #TESTBASE='tests-x86'
@@ -43,7 +47,12 @@ make -j8 V=1 2>&1 | tee android-x86.log
 #rm -f ${TESTBASE}.txt
 #xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/x86
-cd x86 && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
+if [ -z "${CPLUSPLUS_FLAGS}" ]
+then
+  cd x86 && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
+else
+  cd x86 && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
+fi
 make distclean
 #mv ${TESTBASE}.tar.xz x86
 exit 0
