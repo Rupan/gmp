@@ -19,7 +19,7 @@ export TARGET="android-14"
 export TOOLCHAIN="/tmp/${TARGET}-mips"
 if [ ! -d ${TOOLCHAIN} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=mipsel-linux-android-4.7 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=mipsel-linux-android-4.8 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
 fi
 
 export PATH="${TOOLCHAIN}/bin:${PATH}"

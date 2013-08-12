@@ -22,7 +22,7 @@ export TARGET="android-14"
 export TOOLCHAIN="/tmp/${TARGET}-arm"
 if [ ! -d ${TOOLCHAIN} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.7 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.8 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
 fi
 
 export PATH="${TOOLCHAIN}/bin:${PATH}"
