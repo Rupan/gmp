@@ -33,7 +33,7 @@ export CPLUSPLUS_FLAGS='--enable-cxx'
 ################################################################################################################
 
 # base CFLAGS set from ndk-build output
-BASE_CFLAGS='-O2 -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300'
+BASE_CFLAGS='-O2 -g -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300'
 
 # x86, CFLAGS set according to 'CPU Arch ABIs' in the r8c documentation
 export CFLAGS="${BASE_CFLAGS} -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"

@@ -35,7 +35,7 @@ export CPLUSPLUS_FLAGS='--enable-cxx'
 
 ################################################################################################################
 
-BASE_CFLAGS='-O2 -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -fstack-protector -fno-strict-aliasing -finline-limit=64'
+BASE_CFLAGS='-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -fstack-protector -fno-strict-aliasing -finline-limit=64'
 
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
 export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
