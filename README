@@ -1,6 +1,6 @@
 GMP 5 for Android
 
-This repository contains a prebuilt copy of GMP compiled with the Android NDK r8e against API level 14 (which corresponds to Android "Ice Cream Sandwich" 4.0).
+This repository contains a prebuilt copy of GMP 5.1.3 compiled with the Android NDK r9b against API level 14 (which corresponds to Android "Ice Cream Sandwich" 4.0).
 
 The C++ bindings are now included; they depend on libgmp.so, so you will need to ship *both* in your APK for each platform you support.
 
