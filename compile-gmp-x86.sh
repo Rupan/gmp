@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-export NDK="/space/android-ndk-r9b"
+export NDK="/tank/android/android-ndk-r9d"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -15,7 +15,7 @@ then
 fi
 
 # Extract an android-14 toolchain if needed
-export TARGET="android-14"
+export TARGET="android-19"
 export TOOLCHAIN="/tmp/${TARGET}-x86"
 if [ ! -d ${TOOLCHAIN} ]
 then
