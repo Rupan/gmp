@@ -1,23 +1,32 @@
 /* Definitions for GNU multiple precision functions.   -*- mode: c -*-
 
-Copyright 1991, 1993, 1994, 1995, 1996, 1997, 1999, 2000, 2001, 2002,
-2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Free
-Software Foundation, Inc.
+Copyright 1991, 1993-1997, 1999-2014 Free Software Foundation, Inc.
 
 This file is part of the GNU MP Library.
 
 The GNU MP Library is free software; you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation; either version 3 of the License, or (at your
-option) any later version.
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 2 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
 
 The GNU MP Library is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-License for more details.
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
 
-You should have received a copy of the GNU Lesser General Public License
-along with the GNU MP Library.  If not, see http://www.gnu.org/licenses/.  */
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the GNU MP Library.  If not,
+see https://www.gnu.org/licenses/.  */
 
 #ifndef __GMP_H__
 
@@ -46,13 +55,7 @@ along with the GNU MP Library.  If not, see http://www.gnu.org/licenses/.  */
 #ifndef __GNU_MP__
 #define __GNU_MP__ 5
 
-#define __need_size_t  /* tell gcc stddef.h we only want size_t */
-#if defined (__cplusplus)
-#include <cstddef>     /* for size_t */
-#else
 #include <stddef.h>    /* for size_t */
-#endif
-#undef __need_size_t
 
 /* Instantiated by configure. */
 #if ! defined (__GMP_WITHIN_CONFIGURE)
@@ -276,16 +279,14 @@ typedef __mpq_struct *mpq_ptr;
 #define _GMP_H_HAVE_OBSTACK 1
 #endif
 
-/* The prototypes for gmp_vprintf etc are provided only if va_list is
-   available, via an application having included <stdarg.h> or <varargs.h>.
-   Usually va_list is a typedef so can't be tested directly, but C99
-   specifies that va_start is a macro (and it was normally a macro on past
-   systems too), so look for that.
+/* The prototypes for gmp_vprintf etc are provided only if va_list is defined,
+   via an application having included <stdarg.h>.  Usually va_list is a typedef
+   so can't be tested directly, but C99 specifies that va_start is a macro.
 
    <stdio.h> will define some sort of va_list for vprintf and vfprintf, but
    let's not bother trying to use that since it's not standard and since
    application uses for gmp_vprintf etc will almost certainly require the
-   whole <stdarg.h> or <varargs.h> anyway.  */
+   whole <stdarg.h> anyway.  */
 
 #ifdef va_start
 #define _GMP_H_HAVE_VA_LIST 1
@@ -445,10 +446,10 @@ typedef __mpq_struct *mpq_ptr;
 #define __GMP_MAX(h,i) ((h) > (i) ? (h) : (i))
 
 /* __GMP_USHRT_MAX is not "~ (unsigned short) 0" because short is promoted
-   to int by "~".  */
+   to int by "~". It still needs to have the promoted type.  */
 #define __GMP_UINT_MAX   (~ (unsigned) 0)
 #define __GMP_ULONG_MAX  (~ (unsigned long) 0)
-#define __GMP_USHRT_MAX  ((unsigned short) ~0)
+#define __GMP_USHRT_MAX  (0 + (unsigned short) ~0)
 
 
 /* __builtin_expect is in gcc 3.0, and not in 2.95. */
@@ -484,8 +485,8 @@ __GMP_DECLSPEC void mp_set_memory_functions (void *(*) (size_t),
 
 #define mp_get_memory_functions __gmp_get_memory_functions
 __GMP_DECLSPEC void mp_get_memory_functions (void *(**) (size_t),
-                                      void *(**) (void *, size_t, size_t),
-                                      void (**) (void *, size_t)) __GMP_NOTHROW;
+				      void *(**) (void *, size_t, size_t),
+				      void (**) (void *, size_t)) __GMP_NOTHROW;
 
 #define mp_bits_per_limb __gmp_bits_per_limb
 __GMP_DECLSPEC extern const int mp_bits_per_limb;
@@ -1117,6 +1118,22 @@ __GMP_DECLSPEC void mpz_urandomm (mpz_ptr, gmp_randstate_t, mpz_srcptr);
 #define mpz_eor __gmpz_xor
 __GMP_DECLSPEC void mpz_xor (mpz_ptr, mpz_srcptr, mpz_srcptr);
 
+#define mpz_limbs_read __gmpz_limbs_read
+__GMP_DECLSPEC mp_srcptr mpz_limbs_read (mpz_srcptr);
+
+#define mpz_limbs_write __gmpz_limbs_write
+__GMP_DECLSPEC mp_ptr mpz_limbs_write (mpz_ptr, mp_size_t);
+
+#define mpz_limbs_modify __gmpz_limbs_modify
+__GMP_DECLSPEC mp_ptr mpz_limbs_modify (mpz_ptr, mp_size_t);
+
+#define mpz_limbs_finish __gmpz_limbs_finish
+__GMP_DECLSPEC void mpz_limbs_finish (mpz_ptr, mp_size_t);
+
+#define mpz_roinit_n __gmpz_roinit_n
+__GMP_DECLSPEC mpz_srcptr mpz_roinit_n (mpz_ptr, mp_srcptr, mp_size_t);
+
+#define MPZ_ROINIT_N(xp, xs) {{0, (xs),(xp) }}
 
 /**************** Rational (i.e. Q) routines.  ****************/
 
@@ -1481,6 +1498,9 @@ __GMP_DECLSPEC mp_limb_t mpn_divrem_1 (mp_ptr, mp_size_t, mp_srcptr, mp_size_t, 
 #define mpn_divrem_2 __MPN(divrem_2)
 __GMP_DECLSPEC mp_limb_t mpn_divrem_2 (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr);
 
+#define mpn_div_qr_1 __MPN(div_qr_1)
+__GMP_DECLSPEC mp_limb_t mpn_div_qr_1 (mp_ptr, mp_limb_t *, mp_srcptr, mp_size_t, mp_limb_t);
+
 #define mpn_div_qr_2 __MPN(div_qr_2)
 __GMP_DECLSPEC mp_limb_t mpn_div_qr_2 (mp_ptr, mp_ptr, mp_srcptr, mp_size_t, mp_srcptr);
 
@@ -1564,6 +1584,9 @@ __GMP_DECLSPEC mp_bitcnt_t mpn_scan1 (mp_srcptr, mp_bitcnt_t) __GMP_ATTRIBUTE_PU
 #define mpn_set_str __MPN(set_str)
 __GMP_DECLSPEC mp_size_t mpn_set_str (mp_ptr, const unsigned char *, size_t, int);
 
+#define mpn_sizeinbase __MPN(sizeinbase)
+__GMP_DECLSPEC size_t mpn_sizeinbase (mp_srcptr, mp_size_t, int);
+
 #define mpn_sqrtrem __MPN(sqrtrem)
 __GMP_DECLSPEC mp_size_t mpn_sqrtrem (mp_ptr, mp_ptr, mp_srcptr, mp_size_t);
 
@@ -1609,6 +1632,54 @@ __GMP_DECLSPEC void mpn_copyi (mp_ptr, mp_srcptr, mp_size_t);
 __GMP_DECLSPEC void mpn_copyd (mp_ptr, mp_srcptr, mp_size_t);
 #define mpn_zero __MPN(zero)
 __GMP_DECLSPEC void mpn_zero (mp_ptr, mp_size_t);
+
+#define mpn_cnd_add_n __MPN(cnd_add_n)
+__GMP_DECLSPEC mp_limb_t mpn_cnd_add_n (mp_limb_t, mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+#define mpn_cnd_sub_n __MPN(cnd_sub_n)
+__GMP_DECLSPEC mp_limb_t mpn_cnd_sub_n (mp_limb_t, mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+#define mpn_sec_add_1 __MPN(sec_add_1)
+__GMP_DECLSPEC mp_limb_t mpn_sec_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
+#define mpn_sec_add_1_itch __MPN(sec_add_1_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_add_1_itch (mp_size_t) __GMP_ATTRIBUTE_PURE;
+
+#define mpn_sec_sub_1 __MPN(sec_sub_1)
+__GMP_DECLSPEC mp_limb_t mpn_sec_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
+#define mpn_sec_sub_1_itch __MPN(sec_sub_1_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_sub_1_itch (mp_size_t) __GMP_ATTRIBUTE_PURE;
+
+#define mpn_sec_mul __MPN(sec_mul)
+__GMP_DECLSPEC void mpn_sec_mul (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t, mp_ptr);
+#define mpn_sec_mul_itch __MPN(sec_mul_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_mul_itch (mp_size_t, mp_size_t) __GMP_ATTRIBUTE_PURE;
+
+#define mpn_sec_sqr __MPN(sec_sqr)
+__GMP_DECLSPEC void mpn_sec_sqr (mp_ptr, mp_srcptr, mp_size_t, mp_ptr);
+#define mpn_sec_sqr_itch __MPN(sec_sqr_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_sqr_itch (mp_size_t) __GMP_ATTRIBUTE_PURE;
+
+#define mpn_sec_powm __MPN(sec_powm)
+__GMP_DECLSPEC void mpn_sec_powm (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_bitcnt_t, mp_srcptr, mp_size_t, mp_ptr);
+#define mpn_sec_powm_itch __MPN(sec_powm_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_powm_itch (mp_size_t, mp_bitcnt_t, mp_size_t) __GMP_ATTRIBUTE_PURE;
+
+#define mpn_sec_tabselect __MPN(sec_tabselect)
+__GMP_DECLSPEC void mpn_sec_tabselect (volatile mp_limb_t *, volatile const mp_limb_t *, mp_size_t, mp_size_t, mp_size_t);
+
+#define mpn_sec_div_qr __MPN(sec_div_qr)
+__GMP_DECLSPEC mp_limb_t mpn_sec_div_qr (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_ptr);
+#define mpn_sec_div_qr_itch __MPN(sec_div_qr_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_div_qr_itch (mp_size_t, mp_size_t) __GMP_ATTRIBUTE_PURE;
+#define mpn_sec_div_r __MPN(sec_div_r)
+__GMP_DECLSPEC void mpn_sec_div_r (mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_ptr);
+#define mpn_sec_div_r_itch __MPN(sec_div_r_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_div_r_itch (mp_size_t, mp_size_t) __GMP_ATTRIBUTE_PURE;
+
+#define mpn_sec_invert __MPN(sec_invert)
+__GMP_DECLSPEC int mpn_sec_invert (mp_ptr, mp_ptr, mp_srcptr, mp_size_t, mp_bitcnt_t, mp_ptr);
+#define mpn_sec_invert_itch __MPN(sec_invert_itch)
+__GMP_DECLSPEC mp_size_t mpn_sec_invert_itch (mp_size_t) __GMP_ATTRIBUTE_PURE;
+
 
 /**************** mpz inlines ****************/
 
@@ -2145,17 +2216,18 @@ mpn_neg (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
 #define mpz_cmp_ui(Z,UI) \
   (__builtin_constant_p (UI) && (UI) == 0				\
    ? mpz_sgn (Z) : _mpz_cmp_ui (Z,UI))
-#define mpz_cmp_si(Z,SI) \
-  (__builtin_constant_p (SI) && (SI) == 0 ? mpz_sgn (Z)			\
-   : __builtin_constant_p (SI) && (SI) > 0				\
-    ? _mpz_cmp_ui (Z, __GMP_CAST (unsigned long int, SI))		\
+#define mpz_cmp_si(Z,SI)						\
+  (__builtin_constant_p ((SI) >= 0) && (SI) >= 0			\
+   ? mpz_cmp_ui (Z, __GMP_CAST (unsigned long, SI))			\
    : _mpz_cmp_si (Z,SI))
-#define mpq_cmp_ui(Q,NUI,DUI) \
-  (__builtin_constant_p (NUI) && (NUI) == 0				\
-   ? mpq_sgn (Q) : _mpq_cmp_ui (Q,NUI,DUI))
-#define mpq_cmp_si(q,n,d)                       \
-  (__builtin_constant_p ((n) >= 0) && (n) >= 0  \
-   ? mpq_cmp_ui (q, __GMP_CAST (unsigned long, n), d) \
+#define mpq_cmp_ui(Q,NUI,DUI)					\
+  (__builtin_constant_p (NUI) && (NUI) == 0 ? mpq_sgn (Q)	\
+   : __builtin_constant_p ((NUI) == (DUI)) && (NUI) == (DUI)	\
+   ? mpz_cmp (mpq_numref (Q), mpq_denref (Q))			\
+   : _mpq_cmp_ui (Q,NUI,DUI))
+#define mpq_cmp_si(q,n,d)				\
+  (__builtin_constant_p ((n) >= 0) && (n) >= 0		\
+   ? mpq_cmp_ui (q, __GMP_CAST (unsigned long, n), d)	\
    : _mpq_cmp_si (q, n, d))
 #else
 #define mpz_cmp_ui(Z,UI) _mpz_cmp_ui (Z,UI)
@@ -2220,9 +2292,9 @@ enum
 #define __GMP_CFLAGS "-O2 -g -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300 -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
 
 /* Major version number is the value of __GNU_MP__ too, above and in mp.h. */
-#define __GNU_MP_VERSION            5
-#define __GNU_MP_VERSION_MINOR      1
-#define __GNU_MP_VERSION_PATCHLEVEL 3
+#define __GNU_MP_VERSION            6
+#define __GNU_MP_VERSION_MINOR      0
+#define __GNU_MP_VERSION_PATCHLEVEL 0
 #define __GNU_MP_RELEASE (__GNU_MP_VERSION * 10000 + __GNU_MP_VERSION_MINOR * 100 + __GNU_MP_VERSION_PATCHLEVEL)
 
 #define __GMP_H__
