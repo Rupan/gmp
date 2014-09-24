@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-export NDK="/tank/android/android-ndk-r9d"
+export NDK="/tank/android/android-ndk-r10b"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
