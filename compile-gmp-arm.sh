@@ -9,7 +9,7 @@ then
   exit 1
 fi
 
-export NDK="/tank/android/android-ndk-r10b"
+export NDK="/tank/android/android-ndk-r10c"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -18,11 +18,11 @@ then
 fi
 
 # Extract an android-14 toolchain if needed
-export TARGET="android-19"
+export TARGET="android-21"
 export TOOLCHAIN="/tmp/${TARGET}-arm"
 if [ ! -d ${TOOLCHAIN} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.8 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
 fi
 
 export PATH="${TOOLCHAIN}/bin:${PATH}"
