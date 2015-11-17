@@ -18,7 +18,7 @@ then
 fi
 
 # Extract an android-14 toolchain if needed
-export TARGET="android-21"
+export TARGET="android-19"
 export TOOLCHAIN="/tmp/${TARGET}-arm"
 if [ ! -d ${TOOLCHAIN} ]
 then
