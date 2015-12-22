@@ -49,14 +49,12 @@ export LDFLAGS='-Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 
 # arm64-v8a
 echo "======= COMPILING FOR arm64-v8a ======="
-sleep 1
 export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -finline-limit=300 -funswitch-loops"
 ./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=aarch64-linux-android
 make -j8 V=1 2>&1 | tee arm64-v8a.log
 make install DESTDIR=$PWD/arm64-v8a
 cd arm64-v8a && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 make distclean
-exit 0
 
 # LDFLAGS for 32-bit ARM
 export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
