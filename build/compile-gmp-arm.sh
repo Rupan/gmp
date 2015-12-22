@@ -17,15 +17,23 @@ then
   exit 1
 fi
 
-# Extract an android-14 toolchain if needed
-export TARGET="android-19"
-export TOOLCHAIN="/tmp/${TARGET}-arm"
-if [ ! -d ${TOOLCHAIN} ]
+# Extract an Android toolchain, if needed
+export TARGET32="android-19"
+export TARGET64="android-21"
+export TOOLCHAIN32="/tmp/${TARGET32}-arm32"
+export TOOLCHAIN64="/tmp/${TARGET64}-arm64"
+if [ ! -d ${TOOLCHAIN32} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  echo "======= EXTRACTING TOOLCHAIN FOR ARM32 ======="
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --platform=${TARGET32} --install-dir=${TOOLCHAIN32} --system=linux-x86_64
+fi
+if [ ! -d ${TOOLCHAIN64} ]
+then
+  echo "======= EXTRACTING TOOLCHAIN FOR ARM64 ======="
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=aarch64-linux-android-4.9 --platform=${TARGET64} --install-dir=${TOOLCHAIN64} --system=linux-x86_64
 fi
 
-export PATH="${TOOLCHAIN}/bin:${PATH}"
+export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}:${PATH}"
 export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
