@@ -1,4 +1,5 @@
 GMP for Android
+---------------
 
 This repository contains a prebuilt copy of GMP 6.1.0 compiled with the Android NDK r10e (using GCC 4.9) against API level 19.
 
@@ -6,17 +7,19 @@ Compiling against API levels greater than or equal to 21 will produce backwards 
 
 The C++ bindings are included; they depend on libgmp.so, so you will need to ship *both* in your APK for each platform you support.
 
-Installation and usage in an Android project:
+Installation and usage in an Android project
+--------------------------------------------
 
- 1. Check out a copy of this repository into your jni folder, using something like this:
-    $ git submodule add git://github.com/Rupan/gmp.git jni/gmp
- 2. Add "gmp" to APP_MODULES in jni/Application.mk
- 3. Add "gmp" to LOCAL_SHARED_LIBRARIES in your module's Android.mk as required.
- 4. Use GMP as normal by including gmp.h in your source files where required.
- 5. Build the rest of your native code as you would normally:
-    $ ndk-build
+1. Check out a copy of this repository into your jni folder, using something like this:
+   $ git submodule add git://github.com/Rupan/gmp.git jni/gmp
+2. Add "gmp" to APP_MODULES in jni/Application.mk
+3. Add "gmp" to LOCAL_SHARED_LIBRARIES in your module's Android.mk as required.
+4. Use GMP as normal by including gmp.h in your source files where required.
+5. Build the rest of your native code as you would normally:
+   $ ndk-build
 
-Usage at runtime:
+Usage at runtime
+----------------
 
 The GMP library must be loaded prior to other dependent modules.  This is an apparent shortcoming / limitation of Android.  To handle this condition, do something like the following in your Java source code:
 
@@ -27,7 +30,8 @@ The GMP library must be loaded prior to other dependent modules.  This is an app
 
 The scripts used to compile and package the prebuilt libraries is named "compile-gmp-{arm,mips,x86}.sh".  The build procedure is documented therein.
 
-Notes:
+Notes
+-----
 
 The testsuite cannot be easily run on a target device.  The autoconf system which runs the test binaries cannot simply be copied from the build host to the target device and run.  The next best thing is to copy the compiled binaries onto a target and run them by hand - but apparently this does not fully run the test suite.  Still, it is better than nothing since it exercises various GMP code paths and proves that the library will not crash when used in an APK.  prep-tests.sh and run-tests.sh are now provided; using them is left as an exercise to the reader.
 
