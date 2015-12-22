@@ -37,7 +37,7 @@ BASE_CFLAGS='-O2 -g -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-
 
 # x86, CFLAGS set according to 'CPU Arch ABIs' in the r8c documentation
 export CFLAGS="${BASE_CFLAGS} -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
-./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=i686-linux-android MPN_PATH="x86/atom/sse2 x86/atom/mmx x86/atom x86 generic"
+./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=i686-linux-android MPN_PATH="x86/atom/sse2 x86/atom/mmx x86/atom x86/mmx x86 generic"
 make -j8 V=1 2>&1 | tee android-x86.log
 #make -j8 check TESTS=''
 #TESTBASE='tests-x86'
