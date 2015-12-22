@@ -39,3 +39,12 @@ Notes
 The testsuite cannot be easily run on a target device.  The autoconf system which runs the test binaries cannot simply be copied from the build host to the target device and run.  The next best thing is to copy the compiled binaries onto a target and run them by hand - but apparently this does not fully run the test suite.  Still, it is better than nothing since it exercises various GMP code paths and proves that the library will not crash when used in an APK.  prep-tests.sh and run-tests.sh are now provided; using them is left as an exercise to the reader.
 
 An armeabi-v7a-neon build is now provided.  To use it, move the shared object from the armeabi-v7a-neon directory into the armeabi-v7a directory as e.g. "libgmp-neon.so".  You'll have to hack up Android.mk so it copies the new shared object together with the existing one.  Then the correct shared object must be selected at runtime by the application using the cpufeatures static library.  See the NDK documentation, or just stick with the armeabi-v7a build.
+
+Build Reproducibility
+---------------------
+
+In order to reproduce the binaries hosted here, you'll need the following environment:
+
+* Host operating system: Ubuntu 15.10, x86_64
+* NDK toolchain: revision 10e (android-ndk-r10e)
+* GMP 6.1.0 source code decompressed in: /tmp/gmp-6.1.0
