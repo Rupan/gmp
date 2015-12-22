@@ -12,26 +12,24 @@ Installation and usage in an Android project
 
 1. Check out a copy of this repository into your jni folder, using something like this:
 
-    $ git submodule add git://github.com/Rupan/gmp.git jni/gmp
+     $ git submodule add git://github.com/Rupan/gmp.git jni/gmp
 
 2. Add "gmp" to APP_MODULES in jni/Application.mk
 3. Add "gmp" to LOCAL_SHARED_LIBRARIES in your module's Android.mk as required.
 4. Use GMP as normal by including gmp.h in your source files where required.
 5. Build the rest of your native code as you would normally:
 
-    $ ndk-build
+     $ ndk-build
 
 Usage at runtime
 ----------------
 
 The GMP library must be loaded prior to other dependent modules.  This is an apparent shortcoming / limitation of Android.  To handle this condition, do something like the following in your Java source code:
 
-    ```java
     // ...
     System.loadLibrary("gmp");
     System.loadLibrary("myBNmodule");
     // ...
-    ```
 
 The scripts used to compile and package the prebuilt libraries is named "compile-gmp-{arm,mips,x86}.sh".  The build procedure is documented therein.
 
