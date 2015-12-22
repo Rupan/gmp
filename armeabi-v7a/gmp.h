@@ -2321,7 +2321,7 @@ enum
 
 /* Define CC and CFLAGS which were used to build this version of GMP */
 #define __GMP_CC "arm-linux-androideabi-gcc -std=gnu99"
-#define __GMP_CFLAGS "-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -fstack-protector -fno-strict-aliasing -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
+#define __GMP_CFLAGS "-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -no-canonical-prefixes -fno-strict-aliasing -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
 
 /* Major version number is the value of __GNU_MP__ too, above and in mp.h. */
 #define __GNU_MP_VERSION            6
