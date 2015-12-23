@@ -14,16 +14,20 @@ then
   exit 1
 fi
 
-# Extract an android-14 toolchain if needed
-export TARGET="android-19"
-export TOOLCHAIN="/tmp/${TARGET}-x86"
-if [ ! -d ${TOOLCHAIN} ]
+# Extract an android toolchain if needed
+export TOOLCHAIN32="/tmp/android-19-x86"
+if [ ! -d ${TOOLCHAIN32} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86-4.9 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86-4.9 --platform=android-19 --install-dir=${TOOLCHAIN32} --system=linux-x86_64
 fi
 
-export PATH="${TOOLCHAIN}/bin:${PATH}"
-export LDFLAGS='-Wl,-z,noexecstack,-z,relro'
+export TOOLCHAIN64="/tmp/android-21-x86_64"
+if [ ! -d ${TOOLCHAIN64} ]
+then
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86_64-4.9 --platform=android-21 --install-dir=${TOOLCHAIN64} --system=linux-x86_64
+fi
+
+export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}/bin:${PATH}"
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
 
@@ -34,6 +38,8 @@ export CPLUSPLUS_FLAGS='--enable-cxx'
 
 # base CFLAGS set from ndk-build output
 BASE_CFLAGS='-O2 -g -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300'
+
+export LDFLAGS='-Wl,-z,noexecstack,-z,relro'
 
 # x86, CFLAGS set according to 'CPU Arch ABIs' in the r8c documentation
 export CFLAGS="${BASE_CFLAGS} -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
@@ -53,5 +59,13 @@ else
   cd x86 && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 fi
 make distclean
-#mv ${TESTBASE}.tar.xz x86
-exit 0
+
+# x86_64, CFLAGS set according to 'CPU Arch ABIs' in the NDK documentation, LDFLAGS as observed from ndk-build
+
+export LDFLAGS='-Wl,-z,noexecstack,-z,relro,-z,now,--no-undefined'
+export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -no-canonical-prefixes -march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel"
+
+./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=x86_64-linux-android MPN_PATH="x86_64/pentium4 x86_64/fastsse x86_64/k8 x86_64 generic"
+make -j8 V=1 2>&1 | tee android-x86_64.log
+make install DESTDIR=$PWD/x86_64
+cd x86_64 && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
