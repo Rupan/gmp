@@ -17,16 +17,23 @@ then
   exit 1
 fi
 
-# Extract an android-14 toolchain if needed
-export TARGET="android-19"
-export TOOLCHAIN="/tmp/${TARGET}-arm"
-if [ ! -d ${TOOLCHAIN} ]
+# Extract an Android toolchain, if needed
+export TARGET32="android-19"
+export TARGET64="android-21"
+export TOOLCHAIN32="/tmp/${TARGET32}-arm32"
+export TOOLCHAIN64="/tmp/${TARGET64}-arm64"
+if [ ! -d ${TOOLCHAIN32} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  echo "======= EXTRACTING TOOLCHAIN FOR ARM32 ======="
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --platform=${TARGET32} --install-dir=${TOOLCHAIN32} --system=linux-x86_64
+fi
+if [ ! -d ${TOOLCHAIN64} ]
+then
+  echo "======= EXTRACTING TOOLCHAIN FOR ARM64 ======="
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=aarch64-linux-android-4.9 --platform=${TARGET64} --install-dir=${TOOLCHAIN64} --system=linux-x86_64
 fi
 
-export PATH="${TOOLCHAIN}/bin:${PATH}"
-export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
+export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}/bin:${PATH}"
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
 
@@ -35,10 +42,25 @@ export CPLUSPLUS_FLAGS='--enable-cxx'
 
 ################################################################################################################
 
-BASE_CFLAGS='-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -fstack-protector -fno-strict-aliasing -finline-limit=64'
+export BASE_CFLAGS='-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -no-canonical-prefixes -fno-strict-aliasing'
+
+# LDFLAGS for 64-bit ARM
+export LDFLAGS='-Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
+
+# arm64-v8a
+echo "======= COMPILING FOR arm64-v8a ======="
+export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -finline-limit=300 -funswitch-loops"
+./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=aarch64-linux-android MPN_PATH="arm64 generic"
+make -j8 V=1 2>&1 | tee arm64-v8a.log
+make install DESTDIR=$PWD/arm64-v8a
+cd arm64-v8a && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
+make distclean
+
+# LDFLAGS for 32-bit ARM
+export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
-export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
+export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
 ./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
 make -j8 V=1 2>&1 | tee armeabi-v7a-neon.log
 #make -j8 check TESTS=''
@@ -58,7 +80,7 @@ fi
 make distclean
 
 # armeabi-v7a
-export CFLAGS="${BASE_CFLAGS} -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
+export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
 ./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
 make -j8 V=1 2>&1 | tee armeabi-v7a.log
 #make -j8 check TESTS=''
@@ -78,7 +100,7 @@ fi
 make distclean
 
 # armeabi
-export CFLAGS="${BASE_CFLAGS} -march=armv5te -mtune=xscale -msoft-float -mthumb"
+export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv5te -mtune=xscale -msoft-float -mthumb"
 ./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v5 arm generic"
 make -j8 V=1 2>&1 | tee armeabi.log
 #make -j8 check TESTS=''
