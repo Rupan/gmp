@@ -28,6 +28,7 @@ then
 fi
 
 export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}/bin:${PATH}"
+export LDFLAGS='-Wl,-z,noexecstack,-z,relro,-z,now,--no-undefined'
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
 
@@ -37,12 +38,10 @@ export CPLUSPLUS_FLAGS='--enable-cxx'
 ################################################################################################################
 
 # base CFLAGS set from ndk-build output
-BASE_CFLAGS='-O2 -g -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300'
-
-export LDFLAGS='-Wl,-z,noexecstack,-z,relro'
+BASE_CFLAGS='-O2 -g -pedantic -Wa,--noexecstack -fomit-frame-pointer -ffunction-sections -funwind-tables -fstrict-aliasing -funswitch-loops -finline-limit=300 -no-canonical-prefixes'
 
 # x86, CFLAGS set according to 'CPU Arch ABIs' in the r8c documentation
-export CFLAGS="${BASE_CFLAGS} -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
+export CFLAGS="${BASE_CFLAGS} -fstack-protector -march=i686 -mtune=atom -msse3 -mstackrealign -mfpmath=sse -m32"
 ./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=i686-linux-android MPN_PATH="x86/atom/sse2 x86/atom/mmx x86/atom x86/mmx x86 generic"
 make -j8 V=1 2>&1 | tee android-x86.log
 #make -j8 check TESTS=''
@@ -61,9 +60,7 @@ fi
 make distclean
 
 # x86_64, CFLAGS set according to 'CPU Arch ABIs' in the NDK documentation, LDFLAGS as observed from ndk-build
-
-export LDFLAGS='-Wl,-z,noexecstack,-z,relro,-z,now,--no-undefined'
-export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -no-canonical-prefixes -march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel"
+export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel"
 
 ./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=x86_64-linux-android MPN_PATH="x86_64/pentium4 x86_64/fastsse x86_64/k8 x86_64 generic"
 make -j8 V=1 2>&1 | tee android-x86_64.log
