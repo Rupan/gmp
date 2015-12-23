@@ -68,3 +68,4 @@ export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -march=x86-64 -msse4.2 -m
 make -j8 V=1 2>&1 | tee android-x86_64.log
 make install DESTDIR=$PWD/x86_64
 cd x86_64 && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
+make distclean
