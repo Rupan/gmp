@@ -15,16 +15,18 @@ then
 fi
 
 # Extract an android toolchain if needed
-export TOOLCHAIN32="/tmp/android-19-x86"
+export TARGET32="android-19"
+export TOOLCHAIN32="/tmp/${TARGET32}-x86"
 if [ ! -d ${TOOLCHAIN32} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86-4.9 --platform=android-19 --install-dir=${TOOLCHAIN32} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86-4.9 --platform=${TARGET32} --install-dir=${TOOLCHAIN32} --system=linux-x86_64
 fi
 
-export TOOLCHAIN64="/tmp/android-21-x86_64"
+export TARGET64="android-21"
+export TOOLCHAIN64="/tmp/${TARGET64}-x86_64"
 if [ ! -d ${TOOLCHAIN64} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86_64-4.9 --platform=android-21 --install-dir=${TOOLCHAIN64} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=x86_64-4.9 --platform=${TARGET64} --install-dir=${TOOLCHAIN64} --system=linux-x86_64
 fi
 
 export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}/bin:${PATH}"
