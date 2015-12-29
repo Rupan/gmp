@@ -37,9 +37,6 @@ export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}/bin:${PATH}"
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
 
-# The following line enables C++ support.  For GMP <= 5.1.2 you *must* apply gmp_decimal_point.patch prior to running this script.
-export CPLUSPLUS_FLAGS='--enable-cxx'
-
 ################################################################################################################
 
 export BASE_CFLAGS='-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -no-canonical-prefixes -fno-strict-aliasing'
@@ -50,7 +47,7 @@ export LDFLAGS='-Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 # arm64-v8a
 echo "======= COMPILING FOR arm64-v8a ======="
 export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -finline-limit=300 -funswitch-loops"
-./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=aarch64-linux-android MPN_PATH="arm64 generic"
+./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=aarch64-linux-android MPN_PATH="arm64 generic"
 make -j8 V=1 2>&1 | tee arm64-v8a.log
 make install DESTDIR=$PWD/arm64-v8a
 cd arm64-v8a && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
@@ -61,41 +58,26 @@ export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z
 
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
 export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
-./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
+./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
 make -j8 V=1 2>&1 | tee armeabi-v7a-neon.log
 make install DESTDIR=$PWD/armeabi-v7a-neon
-if [ -z "${CPLUSPLUS_FLAGS}" ]
-then
-  cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
-else
-  cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
-fi
+cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 make distclean
 
 # armeabi-v7a
 export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
-./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
+./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
 make -j8 V=1 2>&1 | tee armeabi-v7a.log
 make install DESTDIR=$PWD/armeabi-v7a
-if [ -z "${CPLUSPLUS_FLAGS}" ]
-then
-  cd armeabi-v7a && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
-else
-  cd armeabi-v7a && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
-fi
+cd armeabi-v7a && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 make distclean
 
 # armeabi
 export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv5te -mtune=xscale -msoft-float -mthumb"
-./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v5 arm generic"
+./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v5 arm generic"
 make -j8 V=1 2>&1 | tee armeabi.log
 make install DESTDIR=$PWD/armeabi
-if [ -z "${CPLUSPLUS_FLAGS}" ]
-then
-  cd armeabi && mv usr/lib/libgmp.so usr/include/gmp.h . && rm -rf usr && cd ..
-else
-  cd armeabi && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
-fi
+cd armeabi && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 make distclean
 
 exit 0
