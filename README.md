@@ -58,6 +58,8 @@ The testsuite cannot be easily run on a target device.  The autoconf system whic
 
 An armeabi-v7a-neon build is now provided.  To use it, move the shared object from the armeabi-v7a-neon directory into the armeabi-v7a directory as e.g. "libgmp-neon.so".  You'll have to hack up Android.mk so it copies the new shared object together with the existing one.  Then the correct shared object must be selected at runtime by the application using the cpufeatures static library.  See the NDK documentation, or just stick with the armeabi-v7a build.
 
+When using the "modern" 64-bit builds (i.e., arm64-v8a / x86_64 / mips64) your app must target, at a minimum, Android API level 21.
+
 Build Reproducibility
 ---------------------
 
