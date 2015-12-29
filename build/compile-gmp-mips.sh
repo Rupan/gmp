@@ -37,7 +37,7 @@ export LIBGMPXX_LDFLAGS='-avoid-version'
 ################################################################################################################
 
 # base CFLAGS set from ndk-build output
-BASE_CFLAGS='-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -fno-strict-aliasing -finline-functions -ffunction-sections -funwind-tables -fmessage-length=0 -fno-inline-functions-called-once -fgcse-after-reload -frerun-cse-after-loop -frename-registers -funswitch-loops -finline-limit=300'
+BASE_CFLAGS='-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -fno-strict-aliasing -finline-functions -ffunction-sections -funwind-tables -fmessage-length=0 -fno-inline-functions-called-once -fgcse-after-reload -frerun-cse-after-loop -frename-registers -no-canonical-prefixes'
 
 # mips CFLAGS not specified in 'CPU Arch ABIs' in the NDK documentation
 export CFLAGS="${BASE_CFLAGS}"
