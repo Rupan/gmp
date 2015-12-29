@@ -35,16 +35,10 @@ export CPLUSPLUS_FLAGS='--enable-cxx'
 # base CFLAGS set from ndk-build output
 BASE_CFLAGS='-O2 -g -pedantic -fomit-frame-pointer -Wa,--noexecstack -fno-strict-aliasing -finline-functions -ffunction-sections -funwind-tables -fmessage-length=0 -fno-inline-functions-called-once -fgcse-after-reload -frerun-cse-after-loop -frename-registers -funswitch-loops -finline-limit=300'
 
-# mips CFLAGS not specified in 'CPU Arch ABIs' in the r8b documentation
+# mips CFLAGS not specified in 'CPU Arch ABIs' in the NDK documentation
 export CFLAGS="${BASE_CFLAGS}"
 ./configure --prefix=/usr --disable-static ${CPLUSPLUS_FLAGS} --build=x86_64-pc-linux-gnu --host=mipsel-linux-android
 make -j8 V=1 2>&1 | tee android-mips.log
-#make -j8 check TESTS=''
-#TESTBASE='tests-mips'
-#find tests -type f -executable -exec file '{}' \; | grep -v 'Bourne-Again shell script' | awk -F: '{print $1}' > ${TESTBASE}.txt
-#tar cpf ${TESTBASE}.tar -T ${TESTBASE}.txt --owner root --group root
-#rm -f ${TESTBASE}.txt
-#xz -9 -v ${TESTBASE}.tar
 make install DESTDIR=$PWD/mips
 if [ -z "${CPLUSPLUS_FLAGS}" ]
 then
@@ -53,5 +47,4 @@ else
   cd mips && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 fi
 make distclean
-#mv ${TESTBASE}.tar.xz mips
 exit 0
