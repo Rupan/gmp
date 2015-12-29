@@ -49,7 +49,9 @@ make distclean
 
 # mips64 CFLAGS not specified in 'CPU Arch ABIs' in the NDK documentation
 export CFLAGS="${BASE_CFLAGS}"
-./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=mips64el-linux-android MPN_PATH="generic"
+# Ugly hack: delete incompatible assembly code from MPN directory
+rm -f mpn/mips64/{addmul_1.asm,submul_1.asm,mul_1.asm,sqr_diagonal.asm,umul.asm}
+./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=mips64el-linux-android MPN_PATH="mips64 generic"
 make -j8 V=1 2>&1 | tee android-mips64.log
 make install DESTDIR=$PWD/mips64
 cd mips64 && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
