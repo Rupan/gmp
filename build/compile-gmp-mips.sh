@@ -15,14 +15,21 @@ then
 fi
 
 # Extract an android-14 toolchain if needed
-export TARGET="android-19"
-export TOOLCHAIN="/tmp/${TARGET}-mips"
-if [ ! -d ${TOOLCHAIN} ]
+export TARGET32="android-19"
+export TOOLCHAIN32="/tmp/${TARGET32}-mips"
+if [ ! -d ${TOOLCHAIN32} ]
 then
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=mipsel-linux-android-4.9 --platform=${TARGET} --install-dir=${TOOLCHAIN} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=mipsel-linux-android-4.9 --platform=${TARGET32} --install-dir=${TOOLCHAIN32} --system=linux-x86_64
 fi
 
-export PATH="${TOOLCHAIN}/bin:${PATH}"
+export TARGET64="android-21"
+export TOOLCHAIN64="/tmp/${TARGET64}-mips64"
+if [ ! -d ${TOOLCHAIN64} ]
+then
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=mips64el-linux-android-4.9 --platform=${TARGET64} --install-dir=${TOOLCHAIN64} --system=linux-x86_64
+fi
+
+export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}/bin:${PATH}"
 export LDFLAGS='-Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 export LIBGMP_LDFLAGS='-avoid-version'
 export LIBGMPXX_LDFLAGS='-avoid-version'
@@ -39,4 +46,13 @@ make -j8 V=1 2>&1 | tee android-mips.log
 make install DESTDIR=$PWD/mips
 cd mips && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
 make distclean
+
+# mips64 CFLAGS not specified in 'CPU Arch ABIs' in the NDK documentation
+export CFLAGS="${BASE_CFLAGS}"
+./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=mips64el-linux-android MPN_PATH="mips64 generic"
+make -j8 V=1 2>&1 | tee android-mips64.log
+make install DESTDIR=$PWD/mips64
+cd mips64 && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
+make distclean
+
 exit 0
