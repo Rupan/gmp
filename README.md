@@ -42,7 +42,7 @@ A basic top-level Android.mk might look like this:
 Usage at runtime
 ----------------
 
-The GMP library must be loaded prior to other dependent modules.  This is an apparent shortcoming / limitation of Android.  To handle this condition, do something like the following in your Java source code:
+The GMP library must be loaded prior to other dependent modules.  This is an apparent shortcoming of Android.  To handle this condition, do something like the following in your Java source code:
 
     // ...
     System.loadLibrary("gmp");
@@ -65,6 +65,6 @@ Build Reproducibility
 
 In order to reproduce the binaries hosted here, you'll need the following environment:
 
-* Host operating system: Ubuntu 15.10, x86_64
-* NDK toolchain: revision 10e (android-ndk-r10e)
-* GMP 6.1.0 source code decompressed in: /tmp/gmp-6.1.0
+* Host operating system: Ubuntu 16.10, x86_64
+* NDK toolchain: revision 13b (android-ndk-r13b)
+* GMP 6.1.2 source code decompressed in /tmp/gmp-6.1.2
