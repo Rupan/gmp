@@ -25,12 +25,12 @@ export TOOLCHAIN64="/tmp/${TARGET64}-arm64"
 if [ ! -d ${TOOLCHAIN32} ]
 then
   echo "======= EXTRACTING TOOLCHAIN FOR ARM32 ======="
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --platform=${TARGET32} --install-dir=${TOOLCHAIN32} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --platform=${TARGET32} --install-dir=${TOOLCHAIN32} || exit 1
 fi
 if [ ! -d ${TOOLCHAIN64} ]
 then
   echo "======= EXTRACTING TOOLCHAIN FOR ARM64 ======="
-  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=aarch64-linux-android-4.9 --platform=${TARGET64} --install-dir=${TOOLCHAIN64} --system=linux-x86_64
+  ${NDK}/build/tools/make-standalone-toolchain.sh --toolchain=aarch64-linux-android-4.9 --platform=${TARGET64} --install-dir=${TOOLCHAIN64} || exit 1
 fi
 
 export PATH="${TOOLCHAIN32}/bin:${TOOLCHAIN64}/bin:${PATH}"

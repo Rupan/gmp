@@ -51,6 +51,8 @@ The GMP library must be loaded prior to other dependent modules.  This is an app
 
 The scripts used to compile and package the prebuilt libraries is named "compile-gmp-{arm,mips,x86}.sh".  The build procedure is documented therein.
 
+An example of how to use this library is here: https://github.com/Rupan/GMPtest
+
 Notes
 -----
 
@@ -68,3 +70,4 @@ In order to reproduce the binaries hosted here, you'll need the following enviro
 * Host operating system: Ubuntu 16.10, x86_64
 * NDK toolchain: revision 13b (android-ndk-r13b)
 * GMP 6.1.2 source code decompressed in /tmp/gmp-6.1.2
+* Apply build/gmp_add_missing_paren.patch
