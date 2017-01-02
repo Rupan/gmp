@@ -39,6 +39,8 @@ A basic top-level Android.mk might look like this:
     LOCAL_SHARED_LIBRARIES := gmp
     include $(BUILD_SHARED_LIBRARY)
 
+Inclusion via Android Studio is covered here: https://developer.android.com/studio/projects/add-native-code.html#link-gradle
+
 Usage at runtime
 ----------------
 
