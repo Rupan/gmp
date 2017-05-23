@@ -1,9 +1,9 @@
 GMP for Android
 ---------------
 
-This repository contains a prebuilt copy of [GMP] (https://gmplib.org/) 6.1.0 compiled with the Android NDK r10e (using GCC 4.9) against API level 19.
+This repository contains a prebuilt copy of [GMP] (https://gmplib.org/) 6.1.2 compiled with the Android NDK r14e (using GCC 4.9) against API level 24.
 
-Compiling against API levels greater than or equal to 21 will produce backwards incompatible binaries which reference localeconv().  It is advised to check config.h at each build and confirm that localeconv is not enabled.
+Compiling against API levels greater than or equal to 21 will produce backwards incompatible binaries which reference localeconv() unless special care is taken.  It is advised to check config.h at each build and confirm that localeconv is not enabled.
 
 The C++ bindings are included; they depend on libgmp.so, so you will need to ship *both* in your APK for each platform you support.
 
@@ -69,7 +69,7 @@ Build Reproducibility
 
 In order to reproduce the binaries hosted here, you'll need the following environment:
 
-* Host operating system: Ubuntu 16.10, x86_64
-* NDK toolchain: revision 13b (android-ndk-r13b)
+* Host operating system: Ubuntu 17.04, x86_64
+* NDK toolchain: revision 14b (android-ndk-r14b)
 * GMP 6.1.2 source code decompressed in /tmp/gmp-6.1.2
 * Apply build/gmp_add_missing_paren.patch

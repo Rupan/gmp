@@ -9,7 +9,7 @@ then
   exit 1
 fi
 
-export NDK="/tmp/android-ndk-r13b"
+export NDK="/tmp/android-ndk-r14b"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -18,8 +18,8 @@ then
 fi
 
 # Extract an Android toolchain, if needed
-export TARGET32="android-19"
-export TARGET64="android-21"
+export TARGET32="android-24"
+export TARGET64="android-24"
 export TOOLCHAIN32="/tmp/${TARGET32}-arm32"
 export TOOLCHAIN64="/tmp/${TARGET64}-arm64"
 if [ ! -d ${TOOLCHAIN32} ]
@@ -48,6 +48,7 @@ export LDFLAGS='-Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 echo "======= COMPILING FOR arm64-v8a ======="
 export CFLAGS="${BASE_CFLAGS} -fstack-protector-strong -finline-limit=300 -funswitch-loops"
 ./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=aarch64-linux-android MPN_PATH="arm64 generic"
+sed -i.bak '/HAVE_LOCALECONV 1/d' ./config.h
 make -j8 V=1 2>&1 | tee arm64-v8a.log
 make install DESTDIR=$PWD/arm64-v8a
 cd arm64-v8a && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
@@ -59,6 +60,7 @@ export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
 export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
 ./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
+sed -i.bak '/HAVE_LOCALECONV 1/d' ./config.h
 make -j8 V=1 2>&1 | tee armeabi-v7a-neon.log
 make install DESTDIR=$PWD/armeabi-v7a-neon
 cd armeabi-v7a-neon && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
@@ -67,6 +69,7 @@ make distclean
 # armeabi-v7a
 export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=vfp"
 ./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
+sed -i.bak '/HAVE_LOCALECONV 1/d' ./config.h
 make -j8 V=1 2>&1 | tee armeabi-v7a.log
 make install DESTDIR=$PWD/armeabi-v7a
 cd armeabi-v7a && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
@@ -75,6 +78,7 @@ make distclean
 # armeabi
 export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv5te -mtune=xscale -msoft-float -mthumb"
 ./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v5 arm generic"
+sed -i.bak '/HAVE_LOCALECONV 1/d' ./config.h
 make -j8 V=1 2>&1 | tee armeabi.log
 make install DESTDIR=$PWD/armeabi
 cd armeabi && mv usr/lib/libgmp.so usr/lib/libgmpxx.so usr/include/gmp.h usr/include/gmpxx.h . && rm -rf usr && cd ..
