@@ -9,7 +9,7 @@ then
   exit 1
 fi
 
-export NDK="/tmp/android-ndk-r14b"
+export NDK="/tmp/android-ndk-r21"
 if [ ! -d ${NDK} ]
 then
   echo "Please download and install the NDK, then update the path in this script."
@@ -58,7 +58,7 @@ make distclean
 export LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now'
 
 # armeabi-v7a with neon (unsupported target: will cause crashes on many phones, but works well on the Nexus One)
-export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=2"
+export CFLAGS="${BASE_CFLAGS} -fstack-protector -finline-limit=64 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -ftree-vectorize"
 ./configure --prefix=/usr --disable-static --enable-cxx --build=x86_64-pc-linux-gnu --host=arm-linux-androideabi MPN_PATH="arm/v6t2 arm/v6 arm/v5 arm generic"
 sed -i.bak '/HAVE_LOCALECONV 1/d' ./config.h
 make -j8 V=1 2>&1 | tee armeabi-v7a-neon.log

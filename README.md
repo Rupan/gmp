@@ -69,7 +69,6 @@ Build Reproducibility
 
 In order to reproduce the binaries hosted here, you'll need the following environment:
 
-* Host operating system: Ubuntu 17.04, x86_64
-* NDK toolchain: revision 14b (android-ndk-r14b)
-* GMP 6.1.2 source code decompressed in /tmp/gmp-6.1.2
-* Apply build/gmp_add_missing_paren.patch
+* Host operating system: Ubuntu 19.10, x86_64
+* NDK toolchain: revision 21 (android-ndk-r21)
+* GMP 6.2.0 source code decompressed in /tmp/gmp-6.2.0
